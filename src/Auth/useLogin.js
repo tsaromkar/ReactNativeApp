@@ -3,12 +3,14 @@ import Toast from 'react-native-toast-message';
 import _isEmpty from "lodash/isEmpty";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from "@env";
 
 export const useLogin = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLogin, setIsLogin] = useState(true);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -31,11 +33,11 @@ export const useLogin = () => {
     }, [navigation]);
 
     const isValid = () => {
-        if (_isEmpty(name)) {
+        if (_isEmpty(name) && !isLogin) {
             setError("Please enter a valid name");
             return false;
         }
-        if (!/^[a-zA-Z\s]+$/.test(name)) {
+        if (!/^[a-zA-Z\s]+$/.test(name) && !isLogin) {
             setError("Name should contain letters only");
             return false;
         }
@@ -65,17 +67,22 @@ export const useLogin = () => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
 
+        const body = isLogin ? {
+            email,
+            password
+        } : {
+            name,
+            email,
+            password
+        }
+
         try {
-            const response = await fetch("http://192.168.0.198:3000/login", {
+            const response = await fetch(`${BASE_URL}/api/${isLogin ? "login" : "signup"}`, {
                 method: 'POST', // Specify the HTTP method
                 headers: {
                     'Content-Type': 'application/json', // Indicate JSON content
                 },
-                body: JSON.stringify({
-                    name,
-                    email,
-                    password
-                }), // Convert data to JSON string
+                body: JSON.stringify(body), // Convert data to JSON string
                 signal: controller.signal,
             });
 
@@ -118,6 +125,8 @@ export const useLogin = () => {
         password,
         setPassword,
         onLogin,
-        error
+        error,
+        isLogin,
+        setIsLogin
     }
 }

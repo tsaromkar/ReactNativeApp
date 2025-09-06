@@ -7,21 +7,36 @@ const Home = () => {
 
     const navigation = useNavigation();
 
+    const onClickNavigateToProducts = () => {
+        navigation.navigate("Products");
+    }
+
     const onLogout = async () => {
         await logout();
         navigation.navigate("Login");
     }
 
     return (
-        <Pressable
-            onPress={onLogout}
-            style={({ pressed }) => [
-                styles.button,
-                pressed ? styles.buttonPressed : styles.buttonNormal,
-            ]}
-        >
-            <Text style={styles.buttonText}>Press Me</Text>
-        </Pressable>
+        <>
+            <Pressable
+                onPress={onClickNavigateToProducts}
+                style={({ pressed }) => [
+                    styles.button,
+                    pressed ? styles.buttonPressed : styles.buttonNormal,
+                ]}
+            >
+                <Text style={styles.buttonText}>Show Products</Text>
+            </Pressable>
+            <Pressable
+                onPress={onLogout}
+                style={({ pressed }) => [
+                    styles.button,
+                    pressed ? styles.buttonPressed : styles.buttonNormal,
+                ]}
+            >
+                <Text style={styles.buttonText}>Sign out</Text>
+            </Pressable>
+        </>
     )
 }
 

@@ -11,17 +11,19 @@ const Login = () => {
         password,
         setPassword,
         onLogin,
-        error
+        error,
+        isLogin,
+        setIsLogin
     } = useLogin();
 
     return (
         <View style={styles.container}>
-            <TextInput
+            {!isLogin && <TextInput
                 style={styles.textinput}
                 onChangeText={text => setName(text)}
                 value={name}
                 placeholder="John Doe"
-            />
+            />}
             <TextInput
                 style={[styles.textinput, { marginTop: 8 }]}
                 onChangeText={text => setEmail(text)}
@@ -44,8 +46,26 @@ const Login = () => {
                     pressed ? styles.buttonPressed : styles.buttonNormal,
                 ]}
             >
-                <Text style={styles.buttonText}>Press Me</Text>
+                <Text style={styles.buttonText}>{isLogin ? "Login" : "Sign up"}</Text>
             </Pressable>
+
+            <View style={styles.links}>
+                <Pressable
+                    onPress={() => setIsLogin(true)}
+                    style={isLogin ? styles.selectedLinkBg : styles.linkBg}
+                >
+                    <Text style={isLogin ? styles.selectedTextLink : styles.textLink}>Login</Text>
+                </Pressable>
+                <View style={{ margin: 5 }} />
+                <Pressable
+                    onPress={() => setIsLogin(false)}
+                    style={isLogin ? styles.linkBg : styles.selectedLinkBg}
+                >
+                    <Text style={isLogin ? styles.textLink : styles.selectedTextLink}>
+                        Sign up
+                    </Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
@@ -80,5 +100,10 @@ const styles = StyleSheet.create({
         color: 'red',
         fontSize: 16,
         marginTop: 4,
-    }
+    },
+    links: { flexDirection: 'row', marginTop: 10, justifyContent: 'center' },
+    textLink: { color: "white", cursor: 'pointer' },
+    selectedTextLink: { color: "black", cursor: 'pointer' },
+    linkBg: { backgroundColor: 'black', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 },
+    selectedLinkBg: { backgroundColor: 'white', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 }
 })
