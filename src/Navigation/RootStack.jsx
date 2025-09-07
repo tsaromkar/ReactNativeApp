@@ -6,7 +6,7 @@ import Home from '../Home';
 import Products from '../Products';
 
 const NativeStack = createNativeStackNavigator({
-    initialRouteName: 'Login',
+    initialRouteName: 'Products',
     screens: {
         Login,
         Home,

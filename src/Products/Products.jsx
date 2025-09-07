@@ -1,6 +1,7 @@
-import { ActivityIndicator, Button, FlatList, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Button, FlatList, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { BASE_URL } from "@env";
+import Product from '../Components/Product';
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -40,7 +41,7 @@ const Products = () => {
     }, []);
 
     return (
-        <View style={{ flex: 1, padding: 16 }}>
+        <View style={{ flex: 1, paddingVertical: 16 }}>
             {loading && !products?.length ? (
                 <ActivityIndicator size="large" />
             ) : (
@@ -48,18 +49,17 @@ const Products = () => {
                     data={products}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
-                        <View style={{ padding: 10, borderBottomWidth: 1 }}>
-                            <Text>{item.name}</Text>
-                            <Text>${item.price}</Text>
-                        </View>
+                        <Product product={item} />
                     )}
                     ListFooterComponent={() =>
                         lastVisible ? (
-                            <Button
-                                title={loading ? "Loading..." : "Load More"}
-                                onPress={() => fetchProducts(true)}
-                                disabled={loading}
-                            />
+                            <View style={styles.footer}>
+                                <Button
+                                    title={loading ? "Loading..." : "Load More"}
+                                    onPress={() => fetchProducts(true)}
+                                    disabled={loading}
+                                />
+                            </View>
                         ) : null
                     }
                 />
@@ -70,4 +70,6 @@ const Products = () => {
 
 export default Products
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    footer: { margin: 8 }
+})
