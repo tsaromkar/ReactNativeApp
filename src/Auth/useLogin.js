@@ -11,6 +11,7 @@ export const useLogin = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLogin, setIsLogin] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -76,6 +77,7 @@ export const useLogin = () => {
             password
         }
 
+        setIsLoading(true);
         try {
             const response = await fetch(`${BASE_URL}/api/${isLogin ? "login" : "signup"}`, {
                 method: 'POST', // Specify the HTTP method
@@ -114,6 +116,8 @@ export const useLogin = () => {
                 type: 'info',
                 text1: "Something went wrong with the request",
             })
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -127,6 +131,7 @@ export const useLogin = () => {
         onLogin,
         error,
         isLogin,
-        setIsLogin
+        setIsLogin,
+        isLoading
     }
 }

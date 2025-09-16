@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import { useLogin } from './useLogin';
 
@@ -13,7 +13,8 @@ const Login = () => {
         onLogin,
         error,
         isLogin,
-        setIsLogin
+        setIsLogin,
+        isLoading
     } = useLogin();
 
     return (
@@ -45,8 +46,13 @@ const Login = () => {
                     styles.button,
                     pressed ? styles.buttonPressed : styles.buttonNormal,
                 ]}
+                disabled={isLoading}
             >
-                <Text style={styles.buttonText}>{isLogin ? "Login" : "Sign up"}</Text>
+                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                    <Text style={styles.buttonText}>{isLogin ? "Login" : "Sign up"}</Text>
+                    <View style={{ margin: 4 }} />
+                    {isLoading && <ActivityIndicator size="small" color={"white"} />}
+                </View>
             </Pressable>
 
             <View style={styles.links}>
@@ -102,8 +108,8 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     links: { flexDirection: 'row', marginTop: 10, justifyContent: 'center' },
-    textLink: { color: "white", cursor: 'pointer' },
-    selectedTextLink: { color: "black", cursor: 'pointer' },
-    linkBg: { backgroundColor: 'black', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 },
-    selectedLinkBg: { backgroundColor: 'white', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 }
+    textLink: { color: "black", cursor: 'pointer' },
+    selectedTextLink: { color: "white", cursor: 'pointer' },
+    linkBg: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 },
+    selectedLinkBg: { backgroundColor: 'green', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 }
 })
