@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import CheckBox from '../Components/CheckBox'
+import CheckBox from '@components/CheckBox'
 
 const Filters = ({ productTypes, selectedFilters, setSelectedFilters }) => {
     return (

@@ -1,6 +1,6 @@
 import { ActivityIndicator, Button, FlatList, StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
-import Product from '../Components/Product';
+import Product from '@components/Product';
 import { useProducts } from './useProducts';
 import Filters from './Filters';
 

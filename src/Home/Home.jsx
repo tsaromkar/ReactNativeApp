@@ -1,7 +1,7 @@
 import { Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { logout } from '../Utils/auth';
+import { logout } from '@utils/auth';
 
 const Home = () => {
 

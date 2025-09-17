@@ -6,7 +6,18 @@ module.exports = {
       "path": ".env",
       "safe": false,
       "allowUndefined": true
-    }]
+    }],
+    [
+      'module-resolver',
+      {
+        root: ['./src'], // Adjust if your source code is in a different directory
+        alias: {
+          '@components': './src/Components',
+          '@utils': './src/Utils',
+          // Add more aliases as needed
+        },
+      },
+    ]
   ]
 
 };
