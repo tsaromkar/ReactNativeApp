@@ -35,7 +35,6 @@ export default Filters
 const styles = StyleSheet.create({
     checkboxContainer: {
         flexDirection: 'row',
-        marginTop: 12,
         marginHorizontal: 12
     },
 })

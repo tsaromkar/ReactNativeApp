@@ -1,8 +1,9 @@
-import { ActivityIndicator, Button, FlatList, StyleSheet, TextInput, View } from 'react-native'
+import { ActivityIndicator, Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import Product from '@components/Product';
 import { useProducts } from './useProducts';
 import Filters from './Filters';
+import Carousel from './Carousel';
 
 const Products = () => {
     const {
@@ -15,8 +16,30 @@ const Products = () => {
         handleSearch,
         selectedFilters,
         setSelectedFilters,
-        productTypes
+        productTypes,
+        topDeals
     } = useProducts();
+
+    const renderHeader = () => {
+        return (
+            <View style={styles.header}>
+                <Carousel topDeals={topDeals} />
+                <Text style={styles.text}>Products</Text>
+                <TextInput
+                    style={styles.textIput}
+                    value={search}
+                    onChangeText={setSearch}
+                    onSubmitEditing={handleSearch}
+                    placeholder="Search"
+                />
+                <Filters
+                    productTypes={productTypes}
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
+                />
+            </View>
+        )
+    }
 
     return (
         <>
@@ -26,24 +49,12 @@ const Products = () => {
                 </View>
             ) : (
                 <View style={styles.root}>
-                    <View style={styles.searchContainer}>
-                        <TextInput
-                            style={styles.textIput}
-                            value={search}
-                            onChangeText={setSearch}
-                            onSubmitEditing={handleSearch}
-                            placeholder="Search"
-                        />
-                        <Filters
-                            productTypes={productTypes}
-                            selectedFilters={selectedFilters}
-                            setSelectedFilters={setSelectedFilters}
-                        />
-                    </View>
+                    {renderHeader()}
                     <FlatList
-                        style={{ marginTop: 12 }}
+                        style={styles.flatList}
                         data={products}
                         keyExtractor={item => item.id}
+                        showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <Product product={item} />
                         )}
@@ -70,17 +81,16 @@ export default Products
 const styles = StyleSheet.create({
     footer: { margin: 8 },
     root: { flex: 1, paddingVertical: 16 },
+    header: { gap: 8, marginBottom: 8 },
     searchContainer: {
         marginHorizontal: 8,
-        // flexDirection: 'row',
     },
     textIput: {
         borderWidth: 1,
         borderRadius: 8,
         borderColor: 'grey',
         paddingHorizontal: 8,
-        // flex: 1,
-        // marginRight: 8,
+        marginHorizontal: 8,
     },
     button: {
         paddingHorizontal: 16,
@@ -100,4 +110,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     activityIndContianer: { flex: 1, justifyContent: "center" },
+    text: { fontWeight: "700", color: "#333", fontSize: 16, marginHorizontal: 16 },
+    flatList: { flex: 1 }
 })

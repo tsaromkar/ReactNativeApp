@@ -9,12 +9,25 @@ export const useProducts = () => {
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [selectedFilters, setSelectedFilters] = useState(new Set());
     const [productTypes, setProductTypes] = useState([]);
+    const [topDeals, setTopDeals] = useState([]);
     const pageSize = 10;
 
     useEffect(() => {
         const handler = setTimeout(() => setDebouncedSearch(search), 500);
         return () => clearTimeout(handler);
     }, [search]);
+
+    const fetchTopDeals = async () => {
+        try {
+            let url = `${BASE_URL}/api/get-top-deals`;
+            const res = await fetch(url);
+            const { data } = await res.json();
+            console.log("🚀 ~ fetchTopDeals ~ data:", data);
+            setTopDeals(data.topDeals)
+        } catch (error) {
+            console.error("Error fetching top deals:", error);
+        }
+    }
 
     const fetchProductTypes = async () => {
         try {
@@ -72,6 +85,7 @@ export const useProducts = () => {
     }
 
     useEffect(() => {
+        fetchTopDeals();
         fetchProductTypes();
         fetchProducts();
     }, []);
@@ -94,6 +108,7 @@ export const useProducts = () => {
         handleSearch,
         selectedFilters,
         setSelectedFilters,
-        productTypes
+        productTypes,
+        topDeals
     }
 }
