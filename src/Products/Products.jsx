@@ -2,7 +2,7 @@ import { ActivityIndicator, Button, FlatList, StyleSheet, TextInput, View } from
 import React from 'react'
 import Product from '../Components/Product';
 import { useProducts } from './useProducts';
-import CheckBox from '../Components/CheckBox';
+import Filters from './Filters';
 
 const Products = () => {
     const {
@@ -19,42 +19,26 @@ const Products = () => {
     } = useProducts();
 
     return (
-        <View style={{ flex: 1, paddingVertical: 16 }}>
-            <View style={styles.searchContainer}>
-                <TextInput
-                    style={styles.textIput}
-                    value={search}
-                    onChangeText={setSearch}
-                    onSubmitEditing={handleSearch}
-                    placeholder="Search"
-                />
-            </View>
+        <>
             {loading && !products?.length ? (
-                <ActivityIndicator size="large" />
+                <View style={styles.activityIndContianer}>
+                    <ActivityIndicator size="large" />
+                </View>
             ) : (
-                <>
-                    <View style={styles.checkboxContainer}>
-                        {productTypes.map((filterItem) => {
-                            return (
-                                <View style={{ marginRight: 8 }} key={filterItem}>
-                                    <CheckBox
-                                        label={filterItem}
-                                        checked={selectedFilters.has(filterItem.toLowerCase())}
-                                        onChangeChecked={(item) => {
-                                            const itemLowerCase = String(item.toLowerCase());
-                                            setSelectedFilters(prev => {
-                                                const newSet = new Set(prev);
-                                                if (newSet.has(itemLowerCase)) {
-                                                    newSet.delete(itemLowerCase);
-                                                } else {
-                                                    newSet.add(itemLowerCase)
-                                                }
-                                                return newSet;
-                                            })
-                                        }} />
-                                </View>
-                            )
-                        })}
+                <View style={styles.root}>
+                    <View style={styles.searchContainer}>
+                        <TextInput
+                            style={styles.textIput}
+                            value={search}
+                            onChangeText={setSearch}
+                            onSubmitEditing={handleSearch}
+                            placeholder="Search"
+                        />
+                        <Filters
+                            productTypes={productTypes}
+                            selectedFilters={selectedFilters}
+                            setSelectedFilters={setSelectedFilters}
+                        />
                     </View>
                     <FlatList
                         style={{ marginTop: 12 }}
@@ -75,9 +59,9 @@ const Products = () => {
                             ) : null
                         }
                     />
-                </>
+                </View>
             )}
-        </View>
+        </>
     );
 }
 
@@ -85,6 +69,7 @@ export default Products
 
 const styles = StyleSheet.create({
     footer: { margin: 8 },
+    root: { flex: 1, paddingVertical: 16 },
     searchContainer: {
         marginHorizontal: 8,
         // flexDirection: 'row',
@@ -114,9 +99,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
     },
-    checkboxContainer: {
-        flexDirection: 'row',
-        marginTop: 12,
-        marginHorizontal: 12
-    }
+    activityIndContianer: { flex: 1, justifyContent: "center" },
 })
