@@ -17,7 +17,7 @@ module.exports = {
           // Add more aliases as needed
         },
       },
-    ]
+    ],
+    'react-native-worklets/plugin',
   ]
-
 };

@@ -8,16 +8,17 @@
 import { Platform, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import RootStack from './src/Navigation/RootStack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
       <RootStack />
       <Toast />
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
