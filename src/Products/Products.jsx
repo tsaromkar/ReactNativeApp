@@ -3,7 +3,7 @@ import React from 'react'
 import Product from '@components/Product';
 import { useProducts } from './useProducts';
 import Filters from './Filters';
-import Carousel from './Carousel';
+import TopDeals from './TopDeals';
 
 const Products = () => {
     const {
@@ -23,7 +23,7 @@ const Products = () => {
     const renderHeader = () => {
         return (
             <View style={styles.header}>
-                <Carousel topDeals={topDeals} />
+                <TopDeals topDeals={topDeals} />
                 <Text style={styles.text}>Products</Text>
                 <TextInput
                     style={styles.textIput}

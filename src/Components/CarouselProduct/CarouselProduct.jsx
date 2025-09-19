@@ -1,8 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const CarousalProduct = ({ product }) => {
-
+const CarouselProduct = ({ product }) => {
     const { image, name, stock, price } = product;
 
     return (
@@ -17,26 +16,24 @@ const CarousalProduct = ({ product }) => {
     )
 }
 
-export default CarousalProduct;
+export default CarouselProduct;
 
 const styles = StyleSheet.create({
     root: {
-        flexDirection: "row",
         paddingVertical: 8,
         paddingHorizontal: 16,
         backgroundColor: "white",
         borderRadius: 8,
-        elevation: 2,
-        height: 96
+        height: "100%",
+        marginHorizontal: 8
     },
     image: {
-        width: 80,
-        height: 80,
-        marginRight: 12,
+        width: "100%",
+        height: "70%",
         borderRadius: 8
     },
     info: {
-        paddingVertical: 8,
+        paddingTop: 8,
         justifyContent: "space-between"
     },
     productName: { fontWeight: '500' }
