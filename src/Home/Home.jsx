@@ -28,6 +28,15 @@ const Home = () => {
                 <Text style={styles.buttonText}>Show Products</Text>
             </Pressable>
             <Pressable
+                onPress={() => navigation.navigate("Pagination")}
+                style={({ pressed }) => [
+                    styles.button,
+                    pressed ? styles.buttonPressed : styles.buttonNormal,
+                ]}
+            >
+                <Text style={styles.buttonText}>Pagination</Text>
+            </Pressable>
+            <Pressable
                 onPress={onLogout}
                 style={({ pressed }) => [
                     styles.button,

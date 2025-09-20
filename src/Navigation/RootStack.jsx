@@ -4,13 +4,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from '../Auth';
 import Home from '../Home';
 import Products from '../Products';
+import Pagination from '../Products/Pagination';
 
 const NativeStack = createNativeStackNavigator({
-    initialRouteName: 'Products',
+    initialRouteName: 'Pagination',
     screens: {
         Login,
         Home,
-        Products
+        Products,
+        Pagination
     },
 });
 
