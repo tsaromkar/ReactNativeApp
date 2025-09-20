@@ -19,7 +19,7 @@ export const useProducts = () => {
 
     const fetchTopDeals = async () => {
         try {
-            const res = await axiosGet("/api/get-top-deals");
+            const res = await axiosGet("/product-api/get-top-deals");
             const { data } = res;
             setTopDeals(data.topDeals)
         } catch (error) {
@@ -33,7 +33,7 @@ export const useProducts = () => {
 
     const fetchProductTypes = async () => {
         try {
-            const res = await axiosGet("/api/get-product-types");
+            const res = await axiosGet("/product-api/get-product-types");
             const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
@@ -49,7 +49,7 @@ export const useProducts = () => {
         try {
             setLoading(true);
 
-            let url = `/api/get-products?pageSize=${pageSize}`;
+            let url = `/product-api/get-products?pageSize=${pageSize}`;
             if (loadMore && lastVisible) {
                 url += `&lastVisible=${lastVisible}`;
             }

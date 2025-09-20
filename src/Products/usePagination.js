@@ -19,7 +19,7 @@ export const usePagination = () => {
 
     const fetchProductTypes = async () => {
         try {
-            const res = await axiosGet(`/api/get-product-types`);
+            const res = await axiosGet(`/product-api/get-product-types`);
             const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
@@ -35,7 +35,7 @@ export const usePagination = () => {
         try {
             setLoading(true);
 
-            let url = `/api/get-products-with-pages?page=${page}&pageSize=${pageSize}`;
+            let url = `/product-api/get-products-with-pages?page=${page}&pageSize=${pageSize}`;
             if (newSearch) {
                 url += `&search=${encodeURIComponent(newSearch)}`;
             }

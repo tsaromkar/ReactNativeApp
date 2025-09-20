@@ -76,7 +76,7 @@ export const useLogin = () => {
 
         setIsLoading(true);
         try {
-            const res = await axiosPost(`/api/${isLogin ? "login" : "signup"}`, body);
+            const res = await axiosPost(`/user-api/${isLogin ? "login" : "signup"}`, body);
             const { data, message } = res;
             Toast.show({
                 type: 'success',

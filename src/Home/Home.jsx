@@ -2,8 +2,13 @@ import { Text, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '@utils/auth';
+import { useHome } from './useHome';
 
 const Home = () => {
+
+    const {
+        getNotification
+    } = useHome();
 
     const navigation = useNavigation();
 
@@ -18,6 +23,15 @@ const Home = () => {
 
     return (
         <>
+            <Pressable
+                onPress={getNotification}
+                style={({ pressed }) => [
+                    styles.button,
+                    pressed ? styles.buttonPressed : styles.buttonNormal,
+                ]}
+            >
+                <Text style={styles.buttonText}>Get Notification</Text>
+            </Pressable>
             <Pressable
                 onPress={onClickNavigateToProducts}
                 style={({ pressed }) => [

@@ -11,7 +11,7 @@ const NativeStack = createNativeStackNavigator();
 const RootStack = ({ navigationRef }) => {
     return (
         <NavigationContainer ref={navigationRef}>
-            <NativeStack.Navigator initialRouteName="Home">
+            <NativeStack.Navigator initialRouteName="Login">
                 <NativeStack.Screen name="Login" component={Login} />
                 <NativeStack.Screen name="Home" component={Home} />
                 <NativeStack.Screen name="Products" component={Products} />
