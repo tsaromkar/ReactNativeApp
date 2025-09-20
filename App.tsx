@@ -12,6 +12,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import messaging from "@react-native-firebase/messaging";
 import { useEffect } from 'react';
 import { PermissionsAndroid } from 'react-native';
+import notifee, { AndroidImportance } from "@notifee/react-native";
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -44,7 +45,15 @@ function App() {
     // Foreground listener
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log("New FCM message!", JSON.stringify(remoteMessage.notification));
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      // Display local notification
+      await notifee.displayNotification({
+        title: remoteMessage.notification?.title,
+        body: remoteMessage.notification?.body,
+        android: {
+          channelId: "default",
+          pressAction: { id: "default" },
+        },
+      });
     });
 
     // When app opened from quit
@@ -62,6 +71,18 @@ function App() {
     });
 
     return unsubscribe;
+  }, []);
+
+  // Create notification channel on Android (required for >=8.0)
+  useEffect(() => {
+    async function createChannel() {
+      await notifee.createChannel({
+        id: "default",
+        name: "Default Channel",
+        importance: AndroidImportance.HIGH,
+      });
+    }
+    createChannel();
   }, []);
 
   return (
