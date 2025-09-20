@@ -14,6 +14,7 @@ module.exports = {
         alias: {
           '@components': './src/Components',
           '@utils': './src/Utils',
+          '@network': './src/Network',
           // Add more aliases as needed
         },
       },

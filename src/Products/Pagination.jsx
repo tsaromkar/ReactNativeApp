@@ -59,7 +59,7 @@ const Pagination = () => {
                                 <Product product={item} />
                             )}
                         />}
-                <View style={{ flexDirection: "row", justifyContent: "center", gap: 4 }}>
+                {!!products?.length && <View style={{ flexDirection: "row", justifyContent: "center", gap: 4 }}>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
                         <Pressable
                             key={num}
@@ -72,7 +72,7 @@ const Pagination = () => {
                             <Text style={{ color: "white" }}>{num.toString()}</Text>
                         </Pressable>
                     ))}
-                </View>
+                </View>}
             </View>
         </>
     );

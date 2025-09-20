@@ -3,7 +3,7 @@ import Toast from 'react-native-toast-message';
 import _isEmpty from "lodash/isEmpty";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BASE_URL } from "@env";
+import { post } from '@network/fetch';
 
 export const useLogin = () => {
     const [name, setName] = useState('');
@@ -65,9 +65,6 @@ export const useLogin = () => {
         setError(false);
         if (!isValid()) return;
 
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000);
-
         const body = isLogin ? {
             email,
             password
@@ -79,28 +76,8 @@ export const useLogin = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${BASE_URL}/api/${isLogin ? "login" : "signup"}`, {
-                method: 'POST', // Specify the HTTP method
-                headers: {
-                    'Content-Type': 'application/json', // Indicate JSON content
-                },
-                body: JSON.stringify(body), // Convert data to JSON string
-                signal: controller.signal,
-            });
-
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                const responseData = await response.json(); // Parse the JSON response
-                const message = responseData.message;
-                return Toast.show({
-                    type: 'info',
-                    text1: message,
-                })
-            }
-
-            const responseData = await response.json(); // Parse the JSON response
-            const { data, message } = responseData;
+            const res = await post(`/api/${isLogin ? "login" : "signup"}`, body);
+            const { data, message } = res;
             Toast.show({
                 type: 'success',
                 text1: message,
@@ -114,7 +91,7 @@ export const useLogin = () => {
             console.log("🚀 ~ onLogin ~ error:", error)
             return Toast.show({
                 type: 'info',
-                text1: "Something went wrong with the request",
+                text1: error.message,
             })
         } finally {
             setIsLoading(false);

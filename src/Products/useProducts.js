@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BASE_URL } from "@env";
+import { get } from "@network/fetch";
 
 export const useProducts = () => {
     const [products, setProducts] = useState([]);
@@ -19,25 +19,29 @@ export const useProducts = () => {
 
     const fetchTopDeals = async () => {
         try {
-            let url = `${BASE_URL}/api/get-top-deals`;
-            const res = await fetch(url);
-            const { data } = await res.json();
-            console.log("🚀 ~ fetchTopDeals ~ data:", data);
+            const res = await get("/api/get-top-deals");
+            const { data } = res;
             setTopDeals(data.topDeals)
         } catch (error) {
             console.error("Error fetching top deals:", error);
+            Toast.show({
+                type: 'error',
+                text1: error.message,
+            })
         }
     }
 
     const fetchProductTypes = async () => {
         try {
-            let url = `${BASE_URL}/api/get-product-types`;
-            const res = await fetch(url);
-            const { data } = await res.json();
-            console.log("🚀 ~ fetchProductTypes ~ data:", data);
+            const res = await get("/api/get-product-types");
+            const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
             console.error("Error fetching product-types:", error);
+            Toast.show({
+                type: 'error',
+                text1: error.message,
+            })
         }
     }
 
@@ -45,7 +49,7 @@ export const useProducts = () => {
         try {
             setLoading(true);
 
-            let url = `${BASE_URL}/api/get-products?pageSize=${pageSize}`;
+            let url = `/api/get-products?pageSize=${pageSize}`;
             if (loadMore && lastVisible) {
                 url += `&lastVisible=${lastVisible}`;
             }
@@ -56,10 +60,8 @@ export const useProducts = () => {
                 url += `&type=${Array.from(selectedFilters).join(",")}`;
             }
 
-            console.log("🚀 ~ fetchProducts ~ url:", url)
-            const res = await fetch(url);
-            const { data } = await res.json();
-            console.log("🚀 ~ fetchProducts ~ data:", data)
+            const res = await get(url);
+            const { data } = res;
 
             if (loadMore) {
                 setProducts(prev => [...prev, ...data.products]);

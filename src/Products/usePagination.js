@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BASE_URL } from "@env";
+import { get } from "@network/fetch";
 
 export const usePagination = () => {
     const [products, setProducts] = useState([]);
@@ -19,13 +19,15 @@ export const usePagination = () => {
 
     const fetchProductTypes = async () => {
         try {
-            let url = `${BASE_URL}/api/get-product-types`;
-            const res = await fetch(url);
-            const { data } = await res.json();
-            console.log("🚀 ~ fetchProductTypes ~ data:", data);
+            const res = await get(`/api/get-product-types`);
+            const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
             console.error("Error fetching product-types:", error);
+            Toast.show({
+                type: 'error',
+                text1: error.message,
+            })
         }
     }
 
@@ -33,7 +35,7 @@ export const usePagination = () => {
         try {
             setLoading(true);
 
-            let url = `${BASE_URL}/api/get-products-with-pages?page=${page}&pageSize=${pageSize}`;
+            let url = `/api/get-products-with-pages?page=${page}&pageSize=${pageSize}`;
             if (newSearch) {
                 url += `&search=${encodeURIComponent(newSearch)}`;
             }
@@ -41,11 +43,8 @@ export const usePagination = () => {
                 url += `&type=${Array.from(selectedFilters).join(",")}`;
             }
 
-            console.log("🚀 ~ fetchProducts ~ url:", url)
-            const res = await fetch(url);
-            const json = await res.json();
-            const { data } = json;
-            console.log("🚀 ~ fetchProducts ~ data:", data);
+            const res = await get(url);
+            const { data } = res;
 
             setProducts(data.products);
             setTotalPages(data.totalPages);
