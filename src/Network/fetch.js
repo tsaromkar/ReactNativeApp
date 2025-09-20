@@ -3,7 +3,7 @@ import { BASE_URL } from "@env";
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-export const get = async (url) => {
+export const fetchGet = async (url) => {
     console.log("🚀 ~ get ~ url:", url)
     try {
         const res = await fetch(`${BASE_URL}${url}`, {
@@ -13,24 +13,26 @@ export const get = async (url) => {
             },
             signal: controller.signal,
         });
+        console.log("🚀 ~ get ~ res:", res)
 
         clearTimeout(timeoutId);
 
-        if (!res.ok) {
-            const responseData = await res.json(); // Parse the JSON response
-            const message = responseData.message;
+        const resData = await res.json();
+        console.log("🚀 ~ get ~ resData:", resData);
+
+        const { status, message } = resData;
+
+        if (!status) {
             throw new Error(message);
         }
 
-        const json = await res.json();
-        console.log("🚀 ~ get ~ json:", json)
-        return json;
+        return resData;
     } catch (error) {
         throw error;
     }
 }
 
-export const post = async (url, body) => {
+export const fetchPost = async (url, body) => {
     console.log("🚀 ~ post ~ url:", url)
     try {
         const res = await fetch(`${BASE_URL}${url}`, {
@@ -44,15 +46,16 @@ export const post = async (url, body) => {
 
         clearTimeout(timeoutId);
 
-        if (!res.ok) {
-            const responseData = await res.json(); // Parse the JSON response
-            const message = responseData.message;
+        const resData = await res.json();
+        console.log("🚀 ~ post ~ resData:", resData);
+
+        const { status, message } = resData;
+
+        if (!status) {
             throw new Error(message);
         }
 
-        const json = await res.json();
-        console.log("🚀 ~ post ~ json:", json)
-        return json;
+        return resData;
     } catch (error) {
         throw error;
     }

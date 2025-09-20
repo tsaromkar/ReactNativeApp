@@ -3,7 +3,7 @@ import Toast from 'react-native-toast-message';
 import _isEmpty from "lodash/isEmpty";
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { post } from '@network/fetch';
+import { axiosPost } from '@network/axios';
 
 export const useLogin = () => {
     const [name, setName] = useState('');
@@ -76,7 +76,7 @@ export const useLogin = () => {
 
         setIsLoading(true);
         try {
-            const res = await post(`/api/${isLogin ? "login" : "signup"}`, body);
+            const res = await axiosPost(`/api/${isLogin ? "login" : "signup"}`, body);
             const { data, message } = res;
             Toast.show({
                 type: 'success',

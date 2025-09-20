@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get } from "@network/fetch";
+import { axiosGet } from "@network/axios";
 
 export const useProducts = () => {
     const [products, setProducts] = useState([]);
@@ -19,7 +19,7 @@ export const useProducts = () => {
 
     const fetchTopDeals = async () => {
         try {
-            const res = await get("/api/get-top-deals");
+            const res = await axiosGet("/api/get-top-deals");
             const { data } = res;
             setTopDeals(data.topDeals)
         } catch (error) {
@@ -33,7 +33,7 @@ export const useProducts = () => {
 
     const fetchProductTypes = async () => {
         try {
-            const res = await get("/api/get-product-types");
+            const res = await axiosGet("/api/get-product-types");
             const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
@@ -60,7 +60,7 @@ export const useProducts = () => {
                 url += `&type=${Array.from(selectedFilters).join(",")}`;
             }
 
-            const res = await get(url);
+            const res = await axiosGet(url);
             const { data } = res;
 
             if (loadMore) {

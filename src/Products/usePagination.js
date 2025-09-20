@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get } from "@network/fetch";
+import { axiosGet } from "@network/axios";
 
 export const usePagination = () => {
     const [products, setProducts] = useState([]);
@@ -19,7 +19,7 @@ export const usePagination = () => {
 
     const fetchProductTypes = async () => {
         try {
-            const res = await get(`/api/get-product-types`);
+            const res = await axiosGet(`/api/get-product-types`);
             const { data } = res;
             setProductTypes(data.types)
         } catch (error) {
@@ -43,7 +43,7 @@ export const usePagination = () => {
                 url += `&type=${Array.from(selectedFilters).join(",")}`;
             }
 
-            const res = await get(url);
+            const res = await axiosGet(url);
             const { data } = res;
 
             setProducts(data.products);
