@@ -10,12 +10,17 @@ import Toast from 'react-native-toast-message';
 import RootStack from './src/Navigation/RootStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import messaging from "@react-native-firebase/messaging";
-import { useEffect } from 'react';
+import { createRef, useEffect } from 'react';
 import { PermissionsAndroid } from 'react-native';
-import notifee, { AndroidImportance } from "@notifee/react-native";
+import notifee, { AndroidImportance, EventType } from "@notifee/react-native";
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  const navigationRef = createRef();
+
+  const navigate = (name, params) => {
+    navigationRef.current?.navigate(name, params);
+  }
 
   useEffect(() => {
     // Request permission
@@ -53,24 +58,45 @@ function App() {
           channelId: "default",
           pressAction: { id: "default" },
         },
+        data: remoteMessage.data, // keep custom data
       });
-    });
-
-    // When app opened from quit
-    messaging()
-      .getInitialNotification()
-      .then(remoteMessage => {
-        if (remoteMessage) {
-          console.log("Opened from quit state:", remoteMessage.notification);
-        }
-      });
-
-    // When app opened from background
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log("Opened from background:", remoteMessage.notification);
     });
 
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    // Listen for notification tap
+    return notifee.onForegroundEvent(({ type, detail }) => {
+      if (type === EventType.PRESS) {
+        console.log("Notification pressed:", detail.notification);
+        const { screen, itemId } = detail.notification.data || {};
+        if (screen) {
+          navigate(screen, { itemId });
+        }
+      }
+    });
+  }, []);
+
+  // 🔹 Background taps
+  useEffect(() => {
+    const unsubscribe = messaging().onNotificationOpenedApp(remoteMessage => {
+      const { screen, itemId } = remoteMessage.data || {};
+      if (screen) navigate(screen, { itemId });
+    });
+    return unsubscribe;
+  }, []);
+
+  // 🔹 Quit state taps
+  useEffect(() => {
+    async function checkInitialNotification() {
+      const remoteMessage = await messaging().getInitialNotification();
+      if (remoteMessage) {
+        const { screen, itemId } = remoteMessage.data || {};
+        if (screen) navigate(screen, { itemId });
+      }
+    }
+    checkInitialNotification();
   }, []);
 
   // Create notification channel on Android (required for >=8.0)
@@ -88,7 +114,7 @@ function App() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <RootStack />
+      <RootStack navigationRef={navigationRef} />
       <Toast />
     </GestureHandlerRootView>
   );
