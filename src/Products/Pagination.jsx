@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         paddingHorizontal: 8,
         marginHorizontal: 8,
+        minHeight: 40
     },
     button: {
         paddingHorizontal: 16,
