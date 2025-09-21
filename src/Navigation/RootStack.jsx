@@ -8,9 +8,19 @@ import Pagination from '../Products/Pagination';
 
 const NativeStack = createNativeStackNavigator();
 
+const LINKING = {
+    prefixes: ["reactnativeapp://", "https://reactnativeapp.com"], // prefixes you’ll support
+    config: {
+        screens: {
+            Home: "home",
+            Products: "products",
+        },
+    },
+};
+
 const RootStack = ({ navigationRef }) => {
     return (
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer ref={navigationRef} linking={LINKING}>
             <NativeStack.Navigator initialRouteName="Login">
                 <NativeStack.Screen name="Login" component={Login} />
                 <NativeStack.Screen name="Home" component={Home} />
