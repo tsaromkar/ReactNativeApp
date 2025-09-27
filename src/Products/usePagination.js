@@ -22,13 +22,7 @@ export const usePagination = () => {
             const res = await axiosGet(`/product-api/get-product-types`);
             const { data } = res;
             setProductTypes(data.types)
-        } catch (error) {
-            console.error("Error fetching product-types:", error);
-            Toast.show({
-                type: 'error',
-                text1: error.message,
-            })
-        }
+        } catch (error) { }
     }
 
     const fetchProducts = async (newSearch = null) => {
@@ -48,13 +42,7 @@ export const usePagination = () => {
 
             setProducts(data.products);
             setTotalPages(data.totalPages);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            Toast.show({
-                type: 'error',
-                text1: error.message,
-            })
-        } finally {
+        } catch (e) { } finally {
             setLoading(false);
         }
     };

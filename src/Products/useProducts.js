@@ -22,13 +22,7 @@ export const useProducts = () => {
             const res = await axiosGet("/product-api/get-top-deals");
             const { data } = res;
             setTopDeals(data.topDeals)
-        } catch (error) {
-            console.error("Error fetching top deals:", error);
-            Toast.show({
-                type: 'error',
-                text1: error.message,
-            })
-        }
+        } catch (error) { }
     }
 
     const fetchProductTypes = async () => {
@@ -36,13 +30,7 @@ export const useProducts = () => {
             const res = await axiosGet("/product-api/get-product-types");
             const { data } = res;
             setProductTypes(data.types)
-        } catch (error) {
-            console.error("Error fetching product-types:", error);
-            Toast.show({
-                type: 'error',
-                text1: error.message,
-            })
-        }
+        } catch (error) { }
     }
 
     const fetchProducts = async (loadMore = false, newSearch = null) => {
@@ -70,13 +58,7 @@ export const useProducts = () => {
             }
 
             setLastVisible(data.lastVisible);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-            Toast.show({
-                type: 'error',
-                text1: error.message,
-            })
-        } finally {
+        } catch (error) { } finally {
             setLoading(false);
         }
     };

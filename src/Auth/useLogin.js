@@ -87,12 +87,7 @@ export const useLogin = () => {
                 ['refreshToken', data.refreshToken]
             ]);
             navigation.navigate("Home");
-        } catch (error) {
-            return Toast.show({
-                type: 'info',
-                text1: error.message,
-            })
-        } finally {
+        } catch (error) { } finally {
             setIsLoading(false);
         }
     }
