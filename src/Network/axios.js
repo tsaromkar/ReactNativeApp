@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BASE_URL } from "@env";
 
-const instance = axios.create({
+const api = axios.create({
     baseURL: BASE_URL, // Replace with your API's base URL
     timeout: 5000, // Timeout in milliseconds
     headers: {
@@ -10,37 +10,41 @@ const instance = axios.create({
     },
 });
 
-export const axiosGet = async (url) => {
-    console.log("🚀 ~ get ~ url:", url)
-    try {
-        const res = await instance.get(url);
-        console.log("🚀 ~ get ~ res:", res)
-        const resData = res.data;
-        const { status, message } = resData
-
-        if (!status) {
-            throw new Error(message);
+api.interceptors.response.use(
+    (response) => response.data, // always return `response.data`
+    (error) => {
+        if (error.response) {
+            // Backend error response
+            return Promise.reject(error.response.data);
+        } else if (error.request) {
+            // Network error
+            return Promise.reject({
+                success: false,
+                message: "Network error. Please try again.",
+            });
+        } else {
+            // Something else
+            return Promise.reject({
+                success: false,
+                message: error.message,
+            });
         }
+    }
+);
 
-        return resData;
+export const axiosGet = async (url) => {
+    try {
+        const res = await api.get(url);
+        return res;
     } catch (error) {
         throw error;
     }
 }
 
 export const axiosPost = async (url, body) => {
-    console.log("🚀 ~ post ~ url:", url)
     try {
-        const res = await instance.post(url, body);
-        console.log("🚀 ~ post ~ res:", res)
-        const resData = res.data;
-        const { status, message } = resData
-
-        if (!status) {
-            throw new Error(message);
-        }
-
-        return resData;
+        const res = await api.post(url, body);
+        return res;
     } catch (error) {
         throw error;
     }

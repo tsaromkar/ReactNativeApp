@@ -4,6 +4,7 @@ import CarouselProduct from '@components/CarouselProduct'
 import ReanimatedCarousel from '@components/ReanimatedCarousel'
 
 const TopDeals = ({ topDeals }) => {
+    if (!topDeals) return null;
     return (
         <>
             <Text style={styles.text}>Top Deals</Text>

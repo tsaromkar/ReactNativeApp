@@ -3,6 +3,7 @@ import React from 'react'
 import CheckBox from '@components/CheckBox'
 
 const Filters = ({ productTypes, selectedFilters, setSelectedFilters }) => {
+    if (!productTypes) return null;
     return (
         <View style={styles.checkboxContainer}>
             {productTypes.map((filterItem) => {

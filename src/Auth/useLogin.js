@@ -88,7 +88,6 @@ export const useLogin = () => {
             ]);
             navigation.navigate("Home");
         } catch (error) {
-            console.log("🚀 ~ onLogin ~ error:", error)
             return Toast.show({
                 type: 'info',
                 text1: error.message,
