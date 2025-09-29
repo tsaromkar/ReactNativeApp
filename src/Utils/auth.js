@@ -1,9 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const logout = async () => {
-    console.log("remove keys")
+export const logout = async (setTokens) => {
     try {
-        await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
+        await AsyncStorage.clear();
+        if (setTokens) setTokens(null);
     } catch (error) {
         console.log("🚀 ~ removeTokens ~ error:", error)
         // Error removing data

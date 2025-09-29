@@ -5,7 +5,7 @@
  * @format
  */
 
-import { Alert, Platform, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, useColorScheme } from 'react-native';
 import Toast from 'react-native-toast-message';
 import RootStack from './src/Navigation/RootStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -13,6 +13,18 @@ import messaging from "@react-native-firebase/messaging";
 import { createRef, useEffect } from 'react';
 import { PermissionsAndroid } from 'react-native';
 import notifee, { AndroidImportance, EventType } from "@notifee/react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from '@contexts/contexts/AuthContext';
+
+const LINKING = {
+  prefixes: ["reactnativeapp://", "https://reactnativeapp.com"], // prefixes you’ll support
+  config: {
+    screens: {
+      Home: "home",
+      Products: "products",
+    },
+  },
+};
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -114,7 +126,11 @@ function App() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <RootStack navigationRef={navigationRef} />
+      <NavigationContainer ref={navigationRef} linking={LINKING}>
+        <AuthProvider>
+          <RootStack navigationRef={navigationRef} />
+        </AuthProvider>
+      </NavigationContainer>
       <Toast />
     </GestureHandlerRootView>
   );

@@ -2,6 +2,22 @@ import axios from 'axios';
 import { BASE_URL } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { getGlobalSetTokens } from '@contexts/contexts/AuthContext';
+
+let isRefreshing = false;
+let refreshSubscribers = [];
+const setTokens = getGlobalSetTokens(); // 👈 get context setter
+
+// Function to notify all waiting requests once refresh is done
+function onRefreshed(newAccessToken) {
+    refreshSubscribers.forEach((callback) => callback(newAccessToken));
+    refreshSubscribers = [];
+}
+
+// Add a request to the queue
+function addRefreshSubscriber(callback) {
+    refreshSubscribers.push(callback);
+}
 
 const api = axios.create({
     baseURL: BASE_URL, // Replace with your API's base URL
@@ -16,7 +32,6 @@ api.interceptors.request.use(
     async (config) => {
         const values = await AsyncStorage.multiGet(['accessToken', 'refreshToken']);
         const [, accessToken] = values[0];
-        const [, refreshToken] = values[1];
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
@@ -27,9 +42,61 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
     (response) => response.data, // always return `response.data`
-    (error) => {
-        console.log("🚀 ~ error:", error)
+    async (error) => {
         if (error.response) {
+            const originalRequest = error.config;
+
+            // If 401 and not already retried
+            if (error.response?.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
+
+                if (!isRefreshing) {
+                    isRefreshing = true;
+
+                    try {
+                        const values = await AsyncStorage.multiGet(['accessToken', 'refreshToken']);
+                        const [, refreshToken] = values[1];
+
+                        // 🔄 Call refresh endpoint
+                        const res = await axiosPost(`/user-api/refresh`, { refreshToken });
+
+                        // Save new tokens
+                        const { data, message } = res;
+                        Toast.show({
+                            type: 'success',
+                            text1: message,
+                        })
+                        await AsyncStorage.multiSet([
+                            ['accessToken', data.accessToken],
+                            ['refreshToken', refreshToken]
+                        ]);
+                        setTokens(prev => ({ ...prev, accessToken: data.accessToken }));
+
+                        // Mark refresh complete
+                        isRefreshing = false;
+                        onRefreshed(data.accessToken);
+
+                        // Retry failed request with new token
+                        originalRequest.headers["Authorization"] = `Bearer ${data.accessToken}`;
+                        return api(originalRequest);
+                    } catch (error) {
+                        isRefreshing = false;
+                        refreshSubscribers = [];
+                        // ❌ Refresh failed → force logout
+                        await logout(setTokens);
+                        return Promise.reject(error);
+                    }
+                }
+
+                // If already refreshing, queue the request
+                return new Promise((resolve) => {
+                    addRefreshSubscriber((newAccessToken) => {
+                        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+                        resolve(api(originalRequest));
+                    });
+                });
+            }
+
             // Backend error response
             return Promise.reject(error.response.data);
         } else if (error.request) {

@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Toast from 'react-native-toast-message';
 import _isEmpty from "lodash/isEmpty";
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosPost } from '@network/axios';
+import useAuthContext from '@contexts/hooks/useAuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useLogin = () => {
     const [name, setName] = useState('');
@@ -12,26 +12,7 @@ export const useLogin = () => {
     const [error, setError] = useState('');
     const [isLogin, setIsLogin] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-    const navigation = useNavigation();
-
-    useEffect(() => {
-        const getTokens = async () => {
-            try {
-                const values = await AsyncStorage.multiGet(['accessToken', 'refreshToken']);
-                const [, accessToken] = values[0];
-                const [, refreshToken] = values[1];
-                if (accessToken && refreshToken) {
-                    // We have data!!
-                    console.log(values);
-                    navigation.navigate("Home");
-                }
-            } catch (error) {
-                console.log("🚀 ~ getTokens ~ error:", error)
-                // Error retrieving data
-            }
-        };
-        getTokens();
-    }, [navigation]);
+    const { setTokens } = useAuthContext();
 
     const isValid = () => {
         if (_isEmpty(name) && !isLogin) {
@@ -86,8 +67,13 @@ export const useLogin = () => {
                 ['accessToken', data.accessToken],
                 ['refreshToken', data.refreshToken]
             ]);
-            navigation.navigate("Home");
-        } catch (error) { } finally {
+            setTokens({
+                accessToken: data.accessToken,
+                refreshToken: data.refreshToken
+            })
+        } catch (error) {
+            console.log("🚀 ~ onLogin ~ error:", error)
+        } finally {
             setIsLoading(false);
         }
     }

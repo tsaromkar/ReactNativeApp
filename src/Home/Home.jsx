@@ -3,6 +3,7 @@ import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '@utils/auth';
 import { useHome } from './useHome';
+import useAuthContext from '@contexts/hooks/useAuthContext';
 
 const Home = () => {
 
@@ -11,14 +12,14 @@ const Home = () => {
     } = useHome();
 
     const navigation = useNavigation();
+    const { setTokens } = useAuthContext();
 
     const onClickNavigateToProducts = () => {
         navigation.navigate("Products");
     }
 
     const onLogout = async () => {
-        await logout();
-        navigation.navigate("Login");
+        await logout(setTokens);
     }
 
     return (
