@@ -6,7 +6,22 @@ let globalSetTokens = null;
 
 export const AuthProvider = ({ children }) => {
     const [tokens, setTokens] = useState(null);
-    globalSetTokens = setTokens;
+
+    const handleSetToken = async (data) => {
+        if (data) {
+            await AsyncStorage.multiSet([
+                ['accessToken', data.accessToken],
+                ['refreshToken', data.refreshToken]
+            ]);
+            setTokens({ ...data });
+        } else {
+            await AsyncStorage.multiRemove(['accessToken', 'refreshToken']);
+            setTokens(null);
+        }
+    }
+
+    // to be used in axios
+    globalSetTokens = handleSetToken;
 
     useEffect(() => {
         const getTokens = async () => {
@@ -30,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ tokens, setTokens }}>
+        <AuthContext.Provider value={{ tokens, setTokens: handleSetToken }}>
             {children}
         </AuthContext.Provider>
     );

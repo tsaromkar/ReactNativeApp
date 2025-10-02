@@ -66,11 +66,7 @@ api.interceptors.response.use(
                             type: 'success',
                             text1: message,
                         })
-                        await AsyncStorage.multiSet([
-                            ['accessToken', data.accessToken],
-                            ['refreshToken', refreshToken]
-                        ]);
-                        setTokens(prev => ({ ...prev, accessToken: data.accessToken }));
+                        setTokens({ accessToken: data.accessToken, refreshToken });
 
                         // Mark refresh complete
                         isRefreshing = false;
@@ -83,7 +79,7 @@ api.interceptors.response.use(
                         isRefreshing = false;
                         refreshSubscribers = [];
                         // ❌ Refresh failed → force logout
-                        await logout(setTokens);
+                        logout(setTokens);
                         return Promise.reject(error);
                     }
                 }

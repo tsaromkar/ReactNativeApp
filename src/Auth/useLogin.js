@@ -63,14 +63,7 @@ export const useLogin = () => {
                 type: 'success',
                 text1: message,
             })
-            await AsyncStorage.multiSet([
-                ['accessToken', data.accessToken],
-                ['refreshToken', data.refreshToken]
-            ]);
-            setTokens({
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken
-            })
+            setTokens(data);
         } catch (error) {
             console.log("🚀 ~ onLogin ~ error:", error)
         } finally {

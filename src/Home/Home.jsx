@@ -18,8 +18,8 @@ const Home = () => {
         navigation.navigate("Products");
     }
 
-    const onLogout = async () => {
-        await logout(setTokens);
+    const onLogout = () => {
+        logout(setTokens);
     }
 
     return (
