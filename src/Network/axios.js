@@ -3,6 +3,7 @@ import { BASE_URL } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import { getGlobalSetTokens } from '@contexts/contexts/AuthContext';
+import { logout } from '@utils/auth';
 
 let isRefreshing = false;
 let refreshSubscribers = [];
@@ -47,8 +48,16 @@ api.interceptors.response.use(
             const originalRequest = error.config;
 
             // If 401 and not already retried
-            if (error.response?.status === 401 && !originalRequest._retry) {
+            if (error.response?.status === 403 && !originalRequest._retry) {
                 originalRequest._retry = true;
+
+                if (error.response.data.expired === "refreshToken") {
+                    isRefreshing = false;
+                    refreshSubscribers = [];
+                    // ❌ Refresh failed → force logout
+                    logout(setTokens);
+                    return Promise.reject(error.response.data);
+                }
 
                 if (!isRefreshing) {
                     isRefreshing = true;
