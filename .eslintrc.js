@@ -16,6 +16,11 @@ module.exports = {
     },
   },
   rules: {
-    'import/no-unresolved': 'error',
+    'import/no-unresolved': [
+      'error',
+      {
+        ignore: ['^@env$'],
+      },
+    ],
   },
 };
