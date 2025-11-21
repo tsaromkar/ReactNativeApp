@@ -5,8 +5,7 @@
       "@components/*": ["./src/Components/*"],
       "@utils/*": ["./src/Utils/*"],
       "@network/*": ["./src/Network/*"],
-      "@contexts/*": ["./src/Contexts/*"],
-      "@env": ["./env.d.ts"]
+      "@contexts/*": ["./src/Contexts/*"]
     }
   },
   "exclude": ["node_modules"]
