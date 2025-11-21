@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import Product from '@components/Product';
 import Filters from './Filters';
@@ -59,17 +59,17 @@ const Pagination = () => {
                                 <Product product={item} />
                             )}
                         />}
-                {!!products?.length && <View style={{ flexDirection: "row", justifyContent: "center", gap: 4 }}>
+                {!!products?.length && <View style={styles.paginationContainer}>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
                         <Pressable
                             key={num}
                             onPress={() => setPage(num)}
                             disabled={page === num}
-                            style={{
-                                padding: 10,
-                                backgroundColor: page === num ? "#ccc" : "green"
-                            }}>
-                            <Text style={{ color: "white" }}>{num.toString()}</Text>
+                            style={[
+                                styles.paginationButton,
+                                page === num ? styles.paginationButtonActive : styles.paginationButtonInactive
+                            ]}>
+                            <Text style={styles.paginationButtonText}>{num.toString()}</Text>
                         </Pressable>
                     ))}
                 </View>}
@@ -81,12 +81,8 @@ const Pagination = () => {
 export default Pagination
 
 const styles = StyleSheet.create({
-    footer: { margin: 8 },
     root: { flex: 1, paddingVertical: 16 },
     header: { gap: 8, marginBottom: 8 },
-    searchContainer: {
-        marginHorizontal: 8,
-    },
     textIput: {
         borderWidth: 1,
         borderRadius: 8,
@@ -95,24 +91,23 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
         minHeight: 40
     },
-    button: {
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    buttonNormal: {
-        backgroundColor: '#007bff',
-    },
-    buttonPressed: {
-        backgroundColor: '#0056b3',
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 16,
-    },
     activityIndContianer: { flex: 1, justifyContent: "center", alignItems: "center" },
-    text: { fontWeight: "700", color: "#333", fontSize: 16, marginHorizontal: 16 },
-    flatList: { flex: 1 }
+    flatList: { flex: 1 },
+    paginationContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        gap: 4
+    },
+    paginationButton: {
+        padding: 10
+    },
+    paginationButtonActive: {
+        backgroundColor: "#ccc"
+    },
+    paginationButtonInactive: {
+        backgroundColor: "green"
+    },
+    paginationButtonText: {
+        color: "white"
+    }
 })

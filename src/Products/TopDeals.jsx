@@ -23,6 +23,5 @@ const TopDeals = ({ topDeals }) => {
 export default TopDeals
 
 const styles = StyleSheet.create({
-    item: { marginLeft: 8 },
     text: { fontWeight: "700", color: "#333", fontSize: 16, marginHorizontal: 16 }
 })

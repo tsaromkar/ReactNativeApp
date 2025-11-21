@@ -7,7 +7,7 @@ const Product = ({ product }) => {
 
     return (
         <View style={styles.root}>
-            <Image source={{ uri: image }} style={styles.image}></Image>
+            <Image source={{ uri: image }} style={styles.image} />
             <View style={styles.info}>
                 <Text style={styles.productName}>{name}</Text>
                 <Text>{`In Stock: ${stock} units`}</Text>

@@ -8,7 +8,7 @@ const Filters = ({ productTypes, selectedFilters, setSelectedFilters }) => {
         <View style={styles.checkboxContainer}>
             {productTypes.map((filterItem) => {
                 return (
-                    <View style={{ marginRight: 8 }} key={filterItem}>
+                    <View style={styles.checkboxItem} key={filterItem}>
                         <CheckBox
                             label={filterItem}
                             checked={selectedFilters.has(filterItem.toLowerCase())}
@@ -34,6 +34,9 @@ const Filters = ({ productTypes, selectedFilters, setSelectedFilters }) => {
 export default Filters
 
 const styles = StyleSheet.create({
+    checkboxItem: {
+        marginRight: 8
+    },
     checkboxContainer: {
         flexDirection: 'row',
         marginHorizontal: 12

@@ -3,7 +3,7 @@ import React from 'react'
 
 const CheckBox = ({ label, checked, onChangeChecked }) => {
     return (
-        <Pressable style={{ flexDirection: "row", alignItems: "center" }}
+        <Pressable style={styles.root}
             onPress={() => onChangeChecked(label)}>
             <View style={styles.outer}>
                 {checked && <View style={styles.inner} />}
@@ -16,6 +16,7 @@ const CheckBox = ({ label, checked, onChangeChecked }) => {
 export default CheckBox
 
 const styles = StyleSheet.create({
+    root: { flexDirection: "row", alignItems: "center" },
     outer: {
         borderWidth: 1,
         width: 16,

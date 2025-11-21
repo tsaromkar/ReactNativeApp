@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { axiosGet } from "@network/axios";
 
 export const usePagination = () => {
@@ -25,7 +25,7 @@ export const usePagination = () => {
         } catch (error) { }
     }
 
-    const fetchProducts = async (newSearch = null) => {
+    const fetchProducts = useCallback(async (newSearch = null) => {
         try {
             setLoading(true);
 
@@ -45,7 +45,7 @@ export const usePagination = () => {
         } catch (e) { } finally {
             setLoading(false);
         }
-    };
+    }, [page, selectedFilters]);
 
     useEffect(() => {
         fetchProductTypes();
@@ -54,7 +54,7 @@ export const usePagination = () => {
     useEffect(() => {
         if (debouncedSearch || selectedFilters.size > 0) setPage(1);
         fetchProducts(debouncedSearch);
-    }, [debouncedSearch, selectedFilters, page]);
+    }, [debouncedSearch, selectedFilters, page, fetchProducts]);
 
     const handleSearch = () => {
         setPage(1);

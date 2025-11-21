@@ -24,7 +24,7 @@ const Login = () => {
                     {errors.name && touched.name && <Text style={styles.error}>{errors.name}</Text>}
                 </>}
             <TextInput
-                style={[styles.textinput, { marginTop: 8 }]}
+                style={styles.textinputWithMargin}
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur("email")}
                 value={values.email}
@@ -33,7 +33,7 @@ const Login = () => {
             />
             {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
             <TextInput
-                style={[styles.textinput, { marginTop: 8 }]}
+                style={styles.textinputWithMargin}
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}
                 value={values.password}
@@ -50,9 +50,9 @@ const Login = () => {
                 ]}
                 disabled={isSubmitting}
             >
-                <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                <View style={styles.buttonContent}>
                     <Text style={styles.buttonText}>{isLogin ? "Login" : "Sign up"}</Text>
-                    <View style={{ margin: 4 }} />
+                    <View style={styles.buttonSpacing} />
                     {isSubmitting && <ActivityIndicator size="small" color={"white"} />}
                 </View>
             </Pressable>
@@ -64,7 +64,7 @@ const Login = () => {
                 >
                     <Text style={isLogin ? styles.selectedTextLink : styles.textLink}>Login</Text>
                 </Pressable>
-                <View style={{ margin: 5 }} />
+                <View style={styles.linkSpacing} />
                 <Pressable
                     onPress={() => setIsLogin(false)}
                     style={isLogin ? styles.linkBg : styles.selectedLinkBg}
@@ -87,12 +87,28 @@ const styles = StyleSheet.create({
         padding: 16
     },
     textinput: { height: 40, borderColor: 'gray', borderWidth: 1, borderRadius: 8, paddingStart: 8 },
+    textinputWithMargin: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingStart: 8,
+        marginTop: 8
+    },
     button: {
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 16
+    },
+    buttonContent: {
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    buttonSpacing: {
+        margin: 4
     },
     buttonNormal: {
         backgroundColor: '#007bff',
@@ -110,6 +126,9 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     links: { flexDirection: 'row', marginTop: 10, justifyContent: 'center' },
+    linkSpacing: {
+        margin: 5
+    },
     textLink: { color: "black", cursor: 'pointer' },
     selectedTextLink: { color: "white", cursor: 'pointer' },
     linkBg: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 4 },
