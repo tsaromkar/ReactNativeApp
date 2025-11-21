@@ -1,5 +1,4 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -8,5 +7,8 @@
       "@network/*": ["./src/Network/*"],
       "@contexts/*": ["./src/Contexts/*"]
     }
-  }
+  },
+  "exclude": ["node_modules"]
 }
+
+
