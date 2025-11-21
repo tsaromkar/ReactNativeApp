@@ -1,51 +1,16 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import _isEmpty from "lodash/isEmpty";
 import { axiosPost } from '@network/axios';
 import useAuthContext from '@contexts/hooks/useAuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 export const useLogin = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [isLogin, setIsLogin] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
     const { setTokens } = useAuthContext();
 
-    const isValid = () => {
-        if (_isEmpty(name) && !isLogin) {
-            setError("Please enter a valid name");
-            return false;
-        }
-        if (!/^[a-zA-Z\s]+$/.test(name) && !isLogin) {
-            setError("Name should contain letters only");
-            return false;
-        }
-        if (_isEmpty(email)) {
-            setError("Please enter a valid email");
-            return false;
-        }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Please enter a valid email");
-            return false;
-        }
-        if (_isEmpty(password)) {
-            setError("Please enter a valid password");
-            return false;
-        }
-        if (!/^(?=.*[^a-zA-Z0-9]).{8,}$/.test(password)) {
-            setError("Password should be min 8 chars & should contain letters, numbers and atleast one special character");
-            return false;
-        }
-        return true;
-    }
-
-    const onLogin = async () => {
-        setError(false);
-        if (!isValid()) return;
-
+    const onSubmit = async (values) => {
+        const { name, email, password } = values;
         const body = isLogin ? {
             email,
             password
@@ -54,8 +19,6 @@ export const useLogin = () => {
             email,
             password
         }
-
-        setIsLoading(true);
         try {
             const res = await axiosPost(`/user-api/${isLogin ? "login" : "signup"}`, body);
             const { data, message } = res;
@@ -64,24 +27,44 @@ export const useLogin = () => {
                 text1: message,
             })
             setTokens(data);
-        } catch (error) {
-            console.log("🚀 ~ onLogin ~ error:", error)
-        } finally {
-            setIsLoading(false);
+        } catch (e) {
+            console.log("🚀 ~ onLogin ~ error:", e)
         }
     }
 
+    const validationSchema = useMemo(() => yup.object().shape({
+        name: !isLogin
+            ? yup.string()
+                .required('Name is required')
+                .matches(/^[a-zA-Z\s]+$/, 'Name should contain letters only')
+            : yup.string().notRequired(),
+        email: yup.string().email('Invalid email address').required('Email is required'),
+        password: yup.string()
+            .required('Password is required')
+            .min(6, 'Password must be at least 6 characters')
+            .matches(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])/, 'Password must contain letters, numbers, and at least one special character'),
+    }), [isLogin]);
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            email: '',
+            password: '',
+        },
+        onSubmit,
+        validationSchema,
+        enableReinitialize: false,
+    });
+
+    // Trigger validation when isLogin changes
+    useEffect(() => {
+        formik.validateForm();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLogin]);
+
     return {
-        name,
-        setName,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        onLogin,
-        error,
+        formik,
         isLogin,
         setIsLogin,
-        isLoading
     }
 }

@@ -4,54 +4,56 @@ import { useLogin } from './useLogin';
 
 const Login = () => {
     const {
-        name,
-        setName,
-        email,
-        setEmail,
-        password,
-        setPassword,
-        onLogin,
-        error,
+        formik,
         isLogin,
         setIsLogin,
-        isLoading
     } = useLogin();
+    const { handleSubmit, values, errors, touched, isSubmitting, handleChange, handleBlur } = formik;
 
     return (
         <View style={styles.container}>
-            {!isLogin && <TextInput
-                style={styles.textinput}
-                onChangeText={text => setName(text)}
-                value={name}
-                placeholder="John Doe"
-            />}
+            {!isLogin &&
+                <>
+                    <TextInput
+                        style={styles.textinput}
+                        onChangeText={handleChange("name")}
+                        onBlur={handleBlur("name")}
+                        value={values.name}
+                        placeholder="John Doe"
+                    />
+                    {errors.name && touched.name && <Text style={styles.error}>{errors.name}</Text>}
+                </>}
             <TextInput
                 style={[styles.textinput, { marginTop: 8 }]}
-                onChangeText={text => setEmail(text)}
-                value={email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
                 placeholder="johndoe@abc.com"
                 keyboardType='email-address'
             />
+            {errors.email && touched.email && <Text style={styles.error}>{errors.email}</Text>}
             <TextInput
                 style={[styles.textinput, { marginTop: 8 }]}
-                onChangeText={text => setPassword(text)}
-                value={password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
                 placeholder="Password"
+                onSubmitEditing={handleSubmit}
             // secureTextEntry={true}
             />
-            {error && <Text style={styles.error}>{error}</Text>}
+            {errors.password && touched.password && <Text style={styles.error}>{errors.password}</Text>}
             <Pressable
-                onPress={onLogin}
+                onPress={handleSubmit}
                 style={({ pressed }) => [
                     styles.button,
                     pressed ? styles.buttonPressed : styles.buttonNormal,
                 ]}
-                disabled={isLoading}
+                disabled={isSubmitting}
             >
                 <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <Text style={styles.buttonText}>{isLogin ? "Login" : "Sign up"}</Text>
                     <View style={{ margin: 4 }} />
-                    {isLoading && <ActivityIndicator size="small" color={"white"} />}
+                    {isSubmitting && <ActivityIndicator size="small" color={"white"} />}
                 </View>
             </Pressable>
 
