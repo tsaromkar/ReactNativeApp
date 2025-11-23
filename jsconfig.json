@@ -5,7 +5,8 @@
       "@components/*": ["./src/Components/*"],
       "@utils/*": ["./src/Utils/*"],
       "@network/*": ["./src/Network/*"],
-      "@contexts/*": ["./src/Contexts/*"]
+      "@contexts/*": ["./src/Contexts/*"],
+      "@screens/*": ["./src/Screens/*"]
     }
   },
   "exclude": ["node_modules"]

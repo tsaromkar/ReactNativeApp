@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import Product from '@components/Product';
-import Filters from './Filters';
+import Filters from './Components/Filters';
 import { usePagination } from './usePagination';
 
 const Pagination = () => {

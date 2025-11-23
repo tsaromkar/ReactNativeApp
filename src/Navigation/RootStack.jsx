@@ -1,10 +1,10 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from '../Auth';
-import Home from '../Home';
-import Products from '../Products';
-import Pagination from '../Products/Pagination';
+
 import useAuthContext from '@contexts/hooks/useAuthContext';
+import { Login } from '@screens/Auth';
+import { Home } from '@screens/Home';
+import { Pagination, Products } from '@screens/Products';
 
 const NativeStack = createNativeStackNavigator();
 

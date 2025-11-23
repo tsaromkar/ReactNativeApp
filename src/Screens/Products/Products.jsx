@@ -2,8 +2,8 @@ import { ActivityIndicator, Button, FlatList, StyleSheet, Text, TextInput, View 
 import React, { useMemo } from 'react'
 import Product from '@components/Product';
 import { useProducts } from './useProducts';
-import Filters from './Filters';
-import TopDeals from './TopDeals';
+import Filters from './Components/Filters';
+import TopDeals from './Components/TopDeals';
 
 const Products = () => {
     const {

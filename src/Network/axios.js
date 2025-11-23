@@ -22,7 +22,7 @@ function addRefreshSubscriber(callback) {
 
 const api = axios.create({
     baseURL: BASE_URL, // Replace with your API's base URL
-    timeout: 5000, // Timeout in milliseconds
+    timeout: 30000, // Timeout in milliseconds
     headers: {
         'Content-Type': 'application/json',
         // Add any other default headers here
@@ -84,12 +84,12 @@ api.interceptors.response.use(
                         // Retry failed request with new token
                         originalRequest.headers["Authorization"] = `Bearer ${data.accessToken}`;
                         return api(originalRequest);
-                    } catch (error) {
+                    } catch (e) {
                         isRefreshing = false;
                         refreshSubscribers = [];
                         // ❌ Refresh failed → force logout
                         logout(setTokens);
-                        return Promise.reject(error);
+                        return Promise.reject(e);
                     }
                 }
 

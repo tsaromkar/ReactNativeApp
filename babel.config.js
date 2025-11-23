@@ -16,6 +16,7 @@ module.exports = {
           '@utils': './src/Utils',
           '@network': './src/Network',
           '@contexts': './src/Contexts',
+          '@screens': './src/Screens',
           // Add more aliases as needed
         },
       },
