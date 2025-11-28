@@ -1,0 +1,1 @@
+export { default as WidthAnimation } from './WidthAnimation';
