@@ -4,3 +4,4 @@ export { default as TransformAnimation } from './TransformAnimation/TransformAni
 export { default as AnimatedProps } from './AnimatedProps/AnimatedProps';
 export { default as TapGesture } from './TapGesture/TapGesture';
 export { default as PanGesture } from './PanGesture/PanGesture';
+export { default as Interpolate } from './Interpolate/Interpolate';

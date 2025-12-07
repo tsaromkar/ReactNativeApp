@@ -10,6 +10,7 @@ const Animations = ({ navigation }) => {
             <Button title="Animated Props" onPress={() => navigation.navigate('AnimatedProps')} />
             <Button title="Tap Gesture" onPress={() => navigation.navigate('TapGesture')} />
             <Button title="Pan Gesture" onPress={() => navigation.navigate('PanGesture')} />
+            <Button title="Interpolate" onPress={() => navigation.navigate('Interpolate')} />
         </View>
     )
 }

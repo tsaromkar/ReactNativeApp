@@ -11,6 +11,7 @@ import { TransformAnimation } from '@screens/Animations';
 import { AnimatedProps } from '@screens/Animations';
 import { TapGesture } from '@screens/Animations';
 import { PanGesture } from '@screens/Animations';
+import { Interpolate } from '@screens/Animations';
 
 const NativeStack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ const RootStack = () => {
                         <NativeStack.Screen name="AnimatedProps" component={AnimatedProps} />
                         <NativeStack.Screen name="TapGesture" component={TapGesture} />
                         <NativeStack.Screen name="PanGesture" component={PanGesture} />
+                        <NativeStack.Screen name="Interpolate" component={Interpolate} />
                     </NativeStack.Group>
                     <NativeStack.Group>
                         <NativeStack.Screen name="Login" component={Login} />
