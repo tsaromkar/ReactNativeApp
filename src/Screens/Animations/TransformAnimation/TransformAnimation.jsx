@@ -44,17 +44,21 @@ const TransformNormal = () => {
 
 const TransformAnimatedStyle = () => {
     const translateX = useSharedValue(0);
+    const scale = useSharedValue(1);
 
     const handleMoveRight = () => {
         translateX.value += 50;
+        scale.value += 0.1;
     }
     const handleMoveLeft = () => {
         translateX.value -= 50;
+        scale.value -= 0.1;
     }
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
-            transform: [{ translateX: withSpring(translateX.value * 2) }]
+            transform: [{ translateX: withSpring(translateX.value * 2) },
+            { scale: withSpring(scale.value) }]
         }
     })
 
